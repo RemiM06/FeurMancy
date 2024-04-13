@@ -33,20 +33,12 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
     const interaction = req.body;
 
     if (interaction.type === InteractionType.APPLICATION_COMMAND) {
-
-        if (interaction.data.name === 'quoi') {
-            const gifUrl = 'https://tenor.com/view/feur-theobabac-quoi-gif-24294658'; // Replace with your desired GIF URL
-
-            const embed = new MessageEmbed()
-                .setColor('#FF0000') // Optional: Set embed color (red in this case)
-                .setTitle('Quoi ?')
-                .setDescription(`${interaction.member.user.username} est en feu ! `)
-                .setImage(gifUrl); // Set the GIF URL as the embed image
-
+        console.log(interaction.data.name)
+        if(interaction.data.name == 'quoi'){
             return res.send({
                 type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
                 data: {
-                    embeds: [embed], // Send the embed containing the GIF
+                    content: `FEUR  ${interaction.member.user.username} !`,
                 },
             });
         }

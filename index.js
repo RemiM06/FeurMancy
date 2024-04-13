@@ -26,8 +26,6 @@ const discord_api = axios.create({
     }
 });
 
-const { MessageEmbed } = require('discord.js');
-
 
 
 
@@ -37,19 +35,13 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
     if (interaction.type === InteractionType.APPLICATION_COMMAND) {
         console.log(interaction.data.name === 'quoi')
         if(interaction.data.name === 'quoi'){
-            const gifUrl = 'https://tenor.com/view/feur-theobabac-quoi-gif-24294658';
-
-            const embed = new MessageEmbed()
-                .setColor('#FF0000') // Optional: Set embed color (red in this case)
-                .setTitle('Quoi ?')
-                .setDescription(`${interaction.member.user.username} FEUR ! `)
-                .setImage(gifUrl);
 
             return res.send({
                 type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
                 data: {
-                    content: `**FEUR  ${interaction.member.user.username} !**`,
-                    embeds: [embed],
+                    content: `**FEUR  ${interaction.member.user.username} !**
+                    
+                    https://tenor.com/view/feur-theobabac-quoi-gif-24294658`,
                 },
             });
         }

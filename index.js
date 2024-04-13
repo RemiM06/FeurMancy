@@ -84,7 +84,7 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
 app.get('/register_commands', async (req,res) =>{
     let slash_commands = [
         {
-            "name": "yo",
+            "name": "quoi",
             "description": "replies with Yo!",
             "options": []
         },

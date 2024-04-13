@@ -32,9 +32,8 @@ const discord_api = axios.create({
 app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
     const interaction = req.body;
 
-    if (interaction.type === InteractionType.MESSAGE) { // Check for message interaction
-        const messageContent = interaction.data.content || ''; // Get message content
-        if (messageContent.toLowerCase().includes('quoi')) { // Check for "quoi" regardless of case
+    if (interaction.type === InteractionType.MESSAGE) {  // Get message content
+        if (messageContent==='quoi') {
             const gifUrl = 'https://tenor.com/view/feur-theobabac-quoi-gif-24294658'; // (Optional) Add a GIF URL if desired
             return res.send({
                 type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -47,7 +46,22 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
         }
     }
 
-    return res.send(); // No response for other interaction types
+    if (interaction.type === InteractionType.MESSAGE) { // Check for message interaction
+        const messageContent = interaction.data.content || ''; // Get message content
+        if (messageContent.toLowerCase().includes('quoi')) { // Check if message contains "quoi" (case-insensitive)
+            const gifUrl = 'https://tenor.com/view/feur-theobabac-quoi-gif-24294658'; // (Optional) Add a GIF URL if desired
+            return res.send({
+                type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+                data: {
+                    content: `
+                    
+                    ||**FEUR  ${interaction.member.user.banner} !**||`,
+                },
+            });
+        }
+    }
+
+        return res.send('marche po'); // No response for other interaction types
 });
 
 

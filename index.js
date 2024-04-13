@@ -32,22 +32,46 @@ const discord_api = axios.create({
 app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
     const interaction = req.body;
 
-    if (interaction.type === InteractionType.APPLICATION_COMMAND) {
-        console.log(interaction.data.name === 'quoi')
-        if(interaction.data.name === 'quoi'){
-            const gifUrl = 'https://tenor.com/view/feur-theobabac-quoi-gif-24294658'
-            return res.send({
-                type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-                data: {
-                    content: `
+    // if (interaction.type === InteractionType.APPLICATION_COMMAND) {
+    //     console.log(interaction.data.name === 'quoi')
+    //     if(interaction.data.name === 'quoi'){
+    //         const gifUrl = 'https://tenor.com/view/feur-theobabac-quoi-gif-24294658'
+    //         return res.send({
+    //             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+    //             data: {
+    //                 content: `
+    //
+    //                 ||**FEUR  ${interaction.member.user.username} !**||`
+    //                 + gifUrl,
+    //             },
+    //         });
+    //     }
+    //
+    // }
+
+    if (interaction.type === InteractionType.MESSAGE_COMPONENT) {
+        return res.send();
+    }
+
+    if (interaction.type !== InteractionType.APPLICATION_COMMAND) {
+        return res.send();
+    }
+
+    const messageContent = interaction.data.content || ''; // Get message content or an empty string
+
+    if (messageContent.toLowerCase().includes('quoi')) { // Check for "quoi" regardless of case
+        const gifUrl = 'https://tenor.com/view/feur-theobabac-quoi-gif-24294658';
+        return res.send({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: {
+                content: `
                     
                     ||**FEUR  ${interaction.member.user.username} !**||`
                     + gifUrl,
-                },
-            });
-        }
-
+            },
+        });
     }
+    return res.send();
 
 });
 

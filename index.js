@@ -35,11 +35,12 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
     if (interaction.type === InteractionType.APPLICATION_COMMAND) {
         console.log(interaction.data.name === 'quoi')
         if(interaction.data.name === 'quoi'){
-            const gifUrl = 'https://tenor.com/view/feur-theobabac-quoi-gif-24294658'
+            const gifUrl = '||https://tenor.com/view/feur-theobabac-quoi-gif-24294658||'
             return res.send({
                 type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
                 data: {
-                    content: `**FEUR  ${interaction.member.user.username} !**` + gifUrl,
+                    content: `
+                    ||**FEUR  ${interaction.member.user.username} !**||` + gifUrl,
                 },
             });
         }

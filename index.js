@@ -32,20 +32,6 @@ const discord_api = axios.create({
 app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
     const interaction = req.body;
 
-    if (interaction.type === InteractionType.MESSAGE) {  // Get message content
-        if (messageContent==='quoi') {
-            const gifUrl = 'https://tenor.com/view/feur-theobabac-quoi-gif-24294658'; // (Optional) Add a GIF URL if desired
-            return res.send({
-                type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-                data: {
-                    content: `
-                    
-                    ||**FEUR  ${interaction.member.user.username} !**||`,
-                },
-            });
-        }
-    }
-
     if (interaction.type === InteractionType.MESSAGE) { // Check for message interaction
         const messageContent = interaction.data.content || ''; // Get message content
         if (messageContent.toLowerCase().includes('quoi')) { // Check if message contains "quoi" (case-insensitive)
@@ -66,29 +52,7 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
 
 
 
-app.get('/register_commands', async (req,res) =>{
-    let slash_commands = [
-        {
-            "name": "quoi",
-            "description": "FEUR !",
-            "options": []
-        }
-    ]
-    try
-    {
-        // api docs - https://discord.com/developers/docs/interactions/application-commands#create-global-application-command
-        let discord_response = await discord_api.put(
-            `/applications/${APPLICATION_ID}/guilds/${GUILD_ID}/commands`,
-            slash_commands
-        )
-        console.log(discord_response.data)
-        return res.send('commands have been registered')
-    }catch(e){
-        console.error(e.code)
-        console.error(e.response?.data)
-        return res.send(`${e.code} error from discord`)
-    }
-})
+
 
 
 app.get('/', async (req,res) =>{

@@ -26,7 +26,22 @@ const discord_api = axios.create({
     }
 });
 
+const { Client, Intents } = require('discord.js');
 
+const client = new Client({ intents: [Intents.FLAGS.MESSAGES] }); // Specify message intent
+
+client.on('ready', () => {
+    console.log(`Logged in as ${client.user.tag}!`);
+});
+
+client.on('messageCreate', (message) => {
+    if (message.content.toLowerCase() === 'quoi') {
+        const gifUrl = 'https://tenor.com/view/feur-theobabac-quoi-gif-24294658';
+        message.channel.send(`||**FEUR  ${message.author.username} !**||` + gifUrl);
+    }
+});
+
+client.login(TOKEN);
 
 
 app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {

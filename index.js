@@ -28,7 +28,7 @@ const discord_api = axios.create({
 
 const { Client, Intents } = require('discord.js');
 
-const client = new Client({ intents: [Intents.FLAGS.MESSAGES] }); // Specify message intent
+const client = new Client({ intents: [Intents.FLAGS.MESSAGES] });
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
@@ -42,55 +42,6 @@ client.on('messageCreate', (message) => {
 });
 
 client.login(TOKEN);
-
-
-app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
-    const interaction = req.body;
-
-    if (interaction.type === InteractionType.APPLICATION_COMMAND) {
-        console.log(interaction.data.name === 'quoi')
-        if(interaction.data.name === 'quoi'){
-            const gifUrl = 'https://tenor.com/view/feur-theobabac-quoi-gif-24294658'
-            return res.send({
-                type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-                data: {
-                    content: `
-                    
-                    ||**FEUR  ${interaction.member.user.username} !**||`
-                    + gifUrl,
-                },
-            });
-        }
-
-    }
-
-});
-
-
-
-app.get('/register_commands', async (req,res) =>{
-    let slash_commands = [
-        {
-            "name": "quoi",
-            "description": "FEUR !",
-            "options": []
-        }
-    ]
-    try
-    {
-        // api docs - https://discord.com/developers/docs/interactions/application-commands#create-global-application-command
-        let discord_response = await discord_api.put(
-            `/applications/${APPLICATION_ID}/guilds/${GUILD_ID}/commands`,
-            slash_commands
-        )
-        console.log(discord_response.data)
-        return res.send('commands have been registered')
-    }catch(e){
-        console.error(e.code)
-        console.error(e.response?.data)
-        return res.send(`${e.code} error from discord`)
-    }
-})
 
 
 app.get('/', async (req,res) =>{

@@ -10,15 +10,7 @@ const GUILD_ID = process.env.GUILD_ID
 const axios = require('axios')
 const express = require('express');
 const { InteractionType, InteractionResponseType, verifyKeyMiddleware } = require('discord-interactions');
-const { Client, GatewayIntentBits, Intents } = require('discord.js');
 
-const client = new Client({
-    intents: [
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages,
-        Intents.FLAGS.GUILD_MEMBERS, // Needed to access user information
-    ],
-});
 
 const app = express();
 // app.use(bodyParser.json());
@@ -34,28 +26,7 @@ const discord_api = axios.create({
     }
 });
 
-async function handleMessages(message) {
-    const content = message.content.toLowerCase(); // Ensure case-insensitive matching
 
-    if (content.includes('quoi')) { // Replace with the actual word you want to detect
-        const responseMessage = 'FEUR !'; // Customize your response
-
-        try {
-            await message.channel.send(responseMessage);
-        } catch (error) {
-            console.error('Error sending message:', error);
-        }
-    }
-}
-client.on('messageCreate', handleMessages);
-
-client.once('ready', () => {
-    console.log(`Logged in as ${client.user.tag}!`);
-});
-
-client.login(TOKEN).catch((error) => {
-    console.error('Login error:', error);
-});
 
 
 app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
@@ -69,7 +40,9 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
                 type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
                 data: {
                     content: `
-                    **FEUR  ${interaction.member.user.username} !**` + gifUrl,
+                    
+                    ||**FEUR  ${interaction.member.user.username} !**||`
+                    + gifUrl,
                 },
             });
         }

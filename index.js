@@ -32,22 +32,20 @@ const discord_api = axios.create({
 app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
     const interaction = req.body;
 
-    // if (interaction.type === InteractionType.APPLICATION_COMMAND) {
-    //     console.log(interaction.data.name === 'quoi')
-    //     if(interaction.data.name === 'quoi'){
-    //         const gifUrl = 'https://tenor.com/view/feur-theobabac-quoi-gif-24294658'
-    //         return res.send({
-    //             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    //             data: {
-    //                 content: `
-    //
-    //                 ||**FEUR  ${interaction.member.user.username} !**||`
-    //                 + gifUrl,
-    //             },
-    //         });
-    //     }
-    //
-    // }
+    if (interaction.type === InteractionType.APPLICATION_COMMAND) {
+        if(interaction.data.name === 'quoi'){
+
+            return res.send({
+                type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+                data: {
+                    content: `
+
+                    ||**FEUR  ${interaction.member.user.username} !**||`,
+                },
+            });
+        }
+
+    }
 
     if (interaction.type === InteractionType.MESSAGE_COMPONENT) {
         return res.send();
@@ -66,8 +64,7 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
             data: {
                 content: `
                     
-                    ||**FEUR  ${interaction.member.user.username} !**||`
-                    + gifUrl,
+                    ||**FEUR  ${interaction.member.user.username} !**||`,
             },
         });
     }

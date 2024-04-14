@@ -3,7 +3,7 @@
 require('dotenv').config()
 const APPLICATION_ID = process.env.APPLICATION_ID
 const TOKEN = process.env.TOKEN
-const PUBLIC_KEY = process.env.PUBLIC_KEY || 'not set'
+const PUBLIC_KEY = process.env.PUBLIC_KEY || 'is set'
 const GUILD_ID = process.env.GUILD_ID
 
 
@@ -26,22 +26,34 @@ const discord_api = axios.create({
     }
 });
 
-const { Client, Intents } = require('discord.js');
+const client = new Client({ intents: [Intents.FLAGS.GUILDS] }); // Specify GUILDS intent
 
-const client = new Client({ intents: [Intents.FLAGS.MESSAGES] });
-
-client.on('ready', () => {
+client.once('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
+
+    const pingCommand = new SlashCommandBuilder()
+        .setName('ping')
+        .setDescription('Replies with Pong!');
+
+    client.commands.set(pingCommand.name, pingCommand);
+
+    client.interactions.on('interactionCreate', async (interaction) => {
+        if (!interaction.isCommand()) return;
+
+        const { commandName } = interaction;
+
+        if (commandName === 'ping') {
+            try {
+                await interaction.reply('Pong!');
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    });
 });
 
-client.on('messageCreate', (message) => {
-    if (message.content.toLowerCase() === 'quoi') {
-        const gifUrl = 'https://tenor.com/view/feur-theobabac-quoi-gif-24294658';
-        message.channel.send(`||**FEUR  ${message.author.username} !**||` + gifUrl);
-    }
-});
+client.login('YOUR_BOT_TOKEN');;
 
-client.login(TOKEN);
 
 
 app.get('/', async (req,res) =>{

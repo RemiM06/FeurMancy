@@ -6,28 +6,14 @@ const TOKEN = process.env.TOKEN
 const PUBLIC_KEY = process.env.PUBLIC_KEY || 'is set'
 const GUILD_ID = process.env.GUILD_ID
 
-
-const axios = require('axios')
-const express = require('express');
-const { InteractionType, InteractionResponseType, verifyKeyMiddleware } = require('discord-interactions');
-
-
-const app = express();
-// app.use(bodyParser.json());
-
-const discord_api = axios.create({
-    baseURL: 'https://discord.com/api/',
-    timeout: 3000,
-    headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
-        "Access-Control-Allow-Headers": "Authorization",
-        "Authorization": `Bot ${TOKEN}`
-    }
-});
-
 const { Client, Intents } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+
+
+
+
+
+
 
 
 client.on('message', message => {
@@ -43,23 +29,7 @@ client.on('message', message => {
 
 client.login(TOKEN);
 
-app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
-    const interaction = req.body;
 
-    if (interaction.type === InteractionType.APPLICATION_COMMAND) {
-        console.log(interaction.data.name)
-        if(interaction.data.name == 'quoi'){
-            return res.send({
-                type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE, 
-                data: {
-                    content: `FEUR ${interaction.member.user.username}!`,
-                },
-            });
-        }
-
-    }
-
-});
 
 
 

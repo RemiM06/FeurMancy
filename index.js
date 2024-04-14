@@ -7,6 +7,7 @@ const PUBLIC_KEY = process.env.PUBLIC_KEY || 'is set'
 const GUILD_ID = process.env.GUILD_ID
 
 const { Client, Intents } = require('discord.js');
+
 const client = new Client({
     intents: [
         Intents.FLAGS.GUILDS,

@@ -26,8 +26,9 @@ const discord_api = axios.create({
     }
 });
 
-const Discord = require('discord.js');
-const client = new Discord.Client();
+const { Client, Intents } = require('discord.js');
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+
 
 client.on('message', message => {
     // Vérifier si le message provient d'un utilisateur et n'est pas du bot lui-même

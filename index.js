@@ -26,43 +26,36 @@ const discord_api = axios.create({
     }
 });
 
+const Discord = require('discord.js');
+const client = new Discord.Client();
+
+client.on('message', message => {
+    // Vérifier si le message provient d'un utilisateur et n'est pas du bot lui-même
+    if (!message.author.bot) {
+        // Vérifier si le message contient le mot "quoi"
+        if (message.content.toLowerCase().includes('quoi')) {
+            // Répondre avec "feur"
+            message.channel.send('feur');
+        }
+    }
+});
+
+client.login(TOKEN);
+
 app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
     const interaction = req.body;
 
     if (interaction.type === InteractionType.APPLICATION_COMMAND) {
         console.log(interaction.data.name)
-        if(interaction.data.name == 'yo'){
+        if(interaction.data.name == 'quoi'){
             return res.send({
-                type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+                type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE, 
                 data: {
-                    content: `Yo ${interaction.member.user.username}!`,
+                    content: `FEUR ${interaction.member.user.username}!`,
                 },
             });
         }
 
-        if(interaction.data.name == 'dm'){
-            // https://discord.com/developers/docs/resources/user#create-dm
-            let c = (await discord_api.post(`/users/@me/channels`,{
-                recipient_id: interaction.member.user.id
-            })).data
-            try{
-                // https://discord.com/developers/docs/resources/channel#create-message
-                let res = await discord_api.post(`/channels/${c.id}/messages`,{
-                    content:'Yo! I got your slash command. I am not able to respond to DMs just slash commands.',
-                })
-                console.log(res.data)
-            }catch(e){
-                console.log(e)
-            }
-
-            return res.send({
-                // https://discord.com/developers/docs/interactions/receiving-and-responding#responding-to-an-interaction
-                type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-                data:{
-                    content:'👍'
-                }
-            });
-        }
     }
 
 });
@@ -74,11 +67,6 @@ app.get('/register_commands', async (req,res) =>{
         {
             "name": "yo",
             "description": "replies with Yo!",
-            "options": []
-        },
-        {
-            "name": "dm",
-            "description": "sends user a DM",
             "options": []
         }
     ]
